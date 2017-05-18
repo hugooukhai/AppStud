@@ -17,6 +17,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
 
 public class MainActivity extends FragmentActivity implements GoogleApiClient.ConnectionCallbacks {
 
@@ -113,6 +114,8 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.Co
                 //we got last location, show it on map
                Log.d("latitude ", ""+ mLastLocation.getLatitude());
                Log.d("longitude ", ""+ mLastLocation.getLongitude());
+               LatLng myPosition = new LatLng(mLastLocation.getLatitude(),mLastLocation.getLongitude());
+                mMapFragment.updateMap(myPosition);
 
             }else{
                 //we don't have location, ask for update LocationRequest locationRequest = new LocationRequest();
@@ -126,6 +129,8 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.Co
                         mLastLocation = location;
                         Log.d("latitude ", " on loc changed "+ mLastLocation.getLatitude());
                         Log.d("longitude ", " on loc changed "+ mLastLocation.getLongitude());
+                        LatLng myPosition = new LatLng(mLastLocation.getLatitude(),mLastLocation.getLongitude());
+                        mMapFragment.updateMap(myPosition);
                     }
                 });
             }
