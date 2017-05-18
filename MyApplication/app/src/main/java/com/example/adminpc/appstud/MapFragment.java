@@ -1,14 +1,19 @@
 package com.example.adminpc.appstud;
 
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.adminpc.appstud.Model.Places;
+import com.example.adminpc.appstud.Model.Results;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -39,9 +44,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
                 .findFragmentById(R.id.map);
-               mapFragment.getMapAsync(this);
-        Log.d("OnviewCreated","");
+        mapFragment.getMapAsync(this);
+        Log.d("OnviewCreated", "");
     }
+
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -61,12 +67,25 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
 
-    public void updateMap(LatLng latLng){
+    public void updateMap(LatLng latLng) {
 
         LatLng myPosition = latLng;
-        myPositionMarker = mMap.addMarker(new MarkerOptions().position(myPosition).title("My position"));
+
         sydneyMarker.remove();
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(myPosition));
+        if (ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            mMap.setMyLocationEnabled(true);
+        }
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myPosition,14));
+
+    }
+
+    public void addMarkers(Places places){
+        mMap.clear();
+        for(Results result: places.results){
+            LatLng placeLatLng = result.geometry.location.getLatLng();
+            mMap.addMarker(new MarkerOptions().position(placeLatLng).title(result.name));
+
+        }
 
     }
 }
