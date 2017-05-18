@@ -42,7 +42,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.my_card_view, parent, false);
+                .inflate(R.layout.my_recyclerview_view, parent, false);
         // set the view's size, margins, paddings and layout parameters
 
         ViewHolder vh = new ViewHolder(v);
@@ -53,8 +53,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         if(places.results[position].photos != null){
-
+            //the place has a picture
             Picasso.with(AppStudApplication.getContext()).load("https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference="+places.results[position].photos[0].photoReference+"&key=AIzaSyBNJyNzvROoFZfTmo529RLpGO110sxUoGo").into(holder.mImageView);
+        }else{
+            //Todo: add a default image
         }
         holder.mTextView.setText(places.results[position].name);
     }

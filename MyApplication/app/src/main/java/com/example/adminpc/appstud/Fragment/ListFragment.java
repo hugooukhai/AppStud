@@ -3,6 +3,7 @@ package com.example.adminpc.appstud.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 
 import com.example.adminpc.appstud.Adapter.RecyclerViewAdapter;
 import com.example.adminpc.appstud.AppStudApplication;
+import com.example.adminpc.appstud.MainActivity;
 import com.example.adminpc.appstud.Model.Places;
 import com.example.adminpc.appstud.R;
 
@@ -23,6 +25,8 @@ public class ListFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private RecyclerViewAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private Places placesResponse;
 
     @Nullable
     @Override
@@ -37,12 +41,25 @@ public class ListFragment extends Fragment {
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(AppStudApplication.getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener(){
 
+            @Override
+            public void onRefresh() {
+                //Do not have time to make it clean
+                ((MainActivity)  getActivity()).lookForBars();
+            }
+
+        });
 
     }
 
-    public void setupRecyclerView(Places placesResponse){
+    public void setupRecyclerView(Places mPlacesResponse){
+        mSwipeRefreshLayout.setRefreshing(false);
+        placesResponse = mPlacesResponse;
         mAdapter = new RecyclerViewAdapter(placesResponse);
         mRecyclerView.setAdapter(mAdapter);
     }
+
+
 }
