@@ -159,7 +159,7 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.Co
 
     public void getLocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-
+            
 
             mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                     mGoogleApiClient);
@@ -198,6 +198,7 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.Co
         new Thread(new Runnable() {
             @Override
             public void run() {
+                //Use OKHtttp and GSON libraries to easily get and parse Json
                 OkHttpClient client = new OkHttpClient();
                 Request request = new Request.Builder().url("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="+mLastLocation.getLatitude()+","+mLastLocation.getLongitude()+"&radius=2000&type=bar&key=AIzaSyBNJyNzvROoFZfTmo529RLpGO110sxUoGo").build();
                 Gson gson = new Gson();

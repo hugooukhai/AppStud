@@ -55,6 +55,7 @@ public class ListFragment extends Fragment {
     }
 
     public void setupRecyclerView(Places mPlacesResponse){
+        // stop refreshing animation
         mSwipeRefreshLayout.setRefreshing(false);
         placesResponse = mPlacesResponse;
         mAdapter = new RecyclerViewAdapter(placesResponse);

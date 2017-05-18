@@ -74,6 +74,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         sydneyMarker.remove();
         if (ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            //add  the blue dot on my localisation
             mMap.setMyLocationEnabled(true);
         }
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myPosition,14));

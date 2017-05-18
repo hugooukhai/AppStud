@@ -53,7 +53,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         if(places.results[position].photos != null){
-            //the place has a picture
+            //the place has a picture, use Picasso library to easily put it in ImageView
             Picasso.with(AppStudApplication.getContext()).load("https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference="+places.results[position].photos[0].photoReference+"&key=AIzaSyBNJyNzvROoFZfTmo529RLpGO110sxUoGo").into(holder.mImageView);
         }else{
             //Todo: add a default image
