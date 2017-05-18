@@ -1,4 +1,4 @@
-package com.example.adminpc.appstud;
+package com.example.adminpc.appstud.Fragment;
 
 
 import android.Manifest;
@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 
 import com.example.adminpc.appstud.Model.Places;
 import com.example.adminpc.appstud.Model.Results;
+import com.example.adminpc.appstud.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;

@@ -1,4 +1,4 @@
-package com.example.adminpc.appstud;
+package com.example.adminpc.appstud.Adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -15,7 +15,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     private final List<Fragment> mFragmentList = new ArrayList<>();
 
-    ViewPagerAdapter(FragmentManager manager){
+    public ViewPagerAdapter(FragmentManager manager){
         super(manager);
     }
 

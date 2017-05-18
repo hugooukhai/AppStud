@@ -14,6 +14,9 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.adminpc.appstud.Adapter.ViewPagerAdapter;
+import com.example.adminpc.appstud.Fragment.ListFragment;
+import com.example.adminpc.appstud.Fragment.MapFragment;
 import com.example.adminpc.appstud.Model.Places;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -31,6 +34,7 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.Co
 
 
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
+
     private ViewPager mPager;
     private ViewPagerAdapter mPagerAdapter;
     private GoogleApiClient mGoogleApiClient;
@@ -81,6 +85,8 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.Co
         mPagerAdapter.addFragment(mMapFragment);
         mPagerAdapter.addFragment(mListFragment);
         mPager.setAdapter(mPagerAdapter);
+
+
 
         // Create an instance of GoogleAPIClient.
         if (mGoogleApiClient == null) {
@@ -205,6 +211,7 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.Co
                         @Override
                         public void run() {
                             mMapFragment.addMarkers(placesResponse);
+                            ((ListFragment) mPagerAdapter.getItem(1)).setupRecyclerView(placesResponse);
                         }
                     });
                 } catch (IOException e) {

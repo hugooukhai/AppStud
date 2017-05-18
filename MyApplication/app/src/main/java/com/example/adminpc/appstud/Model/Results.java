@@ -8,4 +8,5 @@ public class Results {
 
     public Geometry geometry;
     public String name;
+    public Photo[] photos;
 }
