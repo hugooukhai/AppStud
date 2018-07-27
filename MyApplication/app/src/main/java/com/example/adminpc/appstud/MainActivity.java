@@ -43,7 +43,6 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.Co
     private ListFragment mListFragment;
     private LatLng myPosition;
     private LatLng noGpsLocation;
-    private Boolean gpsLocation = false;
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -125,7 +124,7 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.Co
         } else {
             //we got permission, get last location
             getLocation();
-            gpsLocation=true;
+
 
         }
     }
@@ -157,8 +156,8 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.Co
                     Toast.makeText(this,"Location permission not granted",Toast.LENGTH_SHORT);
 
                     // Default location on Toulouse if permission not granted
-                    gpsLocation = false;
                     noGpsLocation = new LatLng(43.6, 1.433333);
+                    myPosition = noGpsLocation;
                     mMapFragment.updateMap(noGpsLocation);
                     searchForBars(noGpsLocation);
                 }
@@ -187,6 +186,7 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.Co
 
                 // Default location on Toulouse while waiting for gps
                 noGpsLocation = new LatLng(43.6, 1.433333);
+                myPosition = noGpsLocation;
                 mMapFragment.updateMap(noGpsLocation);
                 searchForBars(noGpsLocation);
 
@@ -242,6 +242,7 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.Co
 
 
     public void searchForBars(final LatLng latLng){
+        myPosition= latLng;
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -268,6 +269,10 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.Co
                 }
             }
         }).start();
+    }
+
+    public void pullToRefresh(){
+        searchForBars(myPosition);
     }
 }
 

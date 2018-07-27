@@ -47,7 +47,7 @@ public class ListFragment extends Fragment {
             @Override
             public void onRefresh() {
                 //Do not have time to make it clean
-                ((MainActivity)  getActivity()).lookForBars();
+                ((MainActivity)  getActivity()).pullToRefresh();
             }
 
         });
