@@ -88,7 +88,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
+        mMap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
+            @Override
+            public boolean onMyLocationButtonClick() {
+                ((MainActivity)getActivity()).getLocation();
+                return true;
+            }
+        });
     }
 
     public void updateMap(LatLng latLng) {
