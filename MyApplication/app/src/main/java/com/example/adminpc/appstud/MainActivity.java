@@ -42,6 +42,8 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.Co
     private MapFragment mMapFragment;
     private ListFragment mListFragment;
     private LatLng myPosition;
+    private LatLng noGpsLocation;
+    private Boolean gpsLocation = false;
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -122,7 +124,8 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.Co
 
         } else {
             //we got permission, get last location
-          getLocation();
+            getLocation();
+            gpsLocation=true;
 
         }
     }
@@ -146,11 +149,13 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.Co
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     //permission granted, get location
                     getLocation();
+                    gpsLocation=true;
 
 
                 } else {
                     // permission not granted
                     Toast.makeText(this,"Location permission not granted",Toast.LENGTH_SHORT);
+                    gpsLocation=false;
                 }
                 return;
             }
@@ -161,9 +166,10 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.Co
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
 
 
-            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-                    mGoogleApiClient);
+            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
             if (mLastLocation != null) {
+
+                gpsLocation = true;
                 //we got last location, show it on map
                 Log.d("latitude ", "" + mLastLocation.getLatitude());
                 Log.d("longitude ", "" + mLastLocation.getLongitude());
@@ -174,6 +180,13 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.Co
 
 
             } else {
+
+                gpsLocation = false;
+                noGpsLocation = new LatLng(43.6, 1.433333);
+                mMapFragment.updateMap(noGpsLocation);
+                lookForBars();
+
+
                 //we don't have location, ask for update LocationRequest locationRequest = new LocationRequest();
                 LocationRequest locationRequest = new LocationRequest();
                 locationRequest.setNumUpdates(1);
@@ -182,6 +195,7 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.Co
                 LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, locationRequest, new LocationListener() {
                     @Override
                     public void onLocationChanged(Location location) {
+                        gpsLocation = true;
                         mLastLocation = location;
                         Log.d("latitude ", " on loc changed " + mLastLocation.getLatitude());
                         Log.d("longitude ", " on loc changed " + mLastLocation.getLongitude());
@@ -195,30 +209,63 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.Co
     }
 
     public void lookForBars(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                //Use OKHtttp and GSON libraries to easily get and parse Json
-                OkHttpClient client = new OkHttpClient();
-                Request request = new Request.Builder().url("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="+mLastLocation.getLatitude()+","+mLastLocation.getLongitude()+"&radius=2000&type=bar&key=AIzaSyBNJyNzvROoFZfTmo529RLpGO110sxUoGo").build();
-                Gson gson = new Gson();
+        if(gpsLocation) {
 
-                try {
-                    Response response = client.newCall(request).execute();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    //Use OKHtttp and GSON libraries to easily get and parse Json
+                    OkHttpClient client = new OkHttpClient();
+                    //Request request = new Request.Builder().url("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="+mLastLocation.getLatitude()+","+mLastLocation.getLongitude()+"&radius=2000&type=bar&key=AIzaSyBNJyNzvROoFZfTmo529RLpGO110sxUoGo").build();
+                    Request request = new Request.Builder().url("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + myPosition.latitude + "," + myPosition.longitude + "&radius=2000&type=bar&key=AIzaSyBNJyNzvROoFZfTmo529RLpGO110sxUoGo").build();
+                    Gson gson = new Gson();
 
-                    final Places placesResponse = gson.fromJson(response.body().string(),Places.class);
+                    try {
+                        Response response = client.newCall(request).execute();
 
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            mMapFragment.addMarkers(placesResponse);
-                            ((ListFragment) mPagerAdapter.getItem(1)).setupRecyclerView(placesResponse);
-                        }
-                    });
-                } catch (IOException e) {
-                    e.printStackTrace();
+                        final Places placesResponse = gson.fromJson(response.body().string(), Places.class);
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mMapFragment.addMarkers(placesResponse);
+                                ((ListFragment) mPagerAdapter.getItem(1)).setupRecyclerView(placesResponse);
+                            }
+                        });
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
-        }).start();
+            }).start();
+        }
+        else{
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    //Use OKHtttp and GSON libraries to easily get and parse Json
+                    OkHttpClient client = new OkHttpClient();
+                    //Request request = new Request.Builder().url("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="+mLastLocation.getLatitude()+","+mLastLocation.getLongitude()+"&radius=2000&type=bar&key=AIzaSyBNJyNzvROoFZfTmo529RLpGO110sxUoGo").build();
+                    Request request = new Request.Builder().url("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + noGpsLocation.latitude + "," + noGpsLocation.longitude + "&radius=2000&type=bar&key=AIzaSyBNJyNzvROoFZfTmo529RLpGO110sxUoGo").build();
+                    Gson gson = new Gson();
+
+                    try {
+                        Response response = client.newCall(request).execute();
+
+                        final Places placesResponse = gson.fromJson(response.body().string(), Places.class);
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mMapFragment.addMarkers(placesResponse,noGpsLocation);
+                                ((ListFragment) mPagerAdapter.getItem(1)).setupRecyclerView(placesResponse);
+                            }
+                        });
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+        }
     }
 }
+

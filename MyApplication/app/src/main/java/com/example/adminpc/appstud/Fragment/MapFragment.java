@@ -3,6 +3,7 @@ package com.example.adminpc.appstud.Fragment;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -19,6 +20,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -69,25 +71,47 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     public void updateMap(LatLng latLng) {
-
-        LatLng myPosition = latLng;
-
         sydneyMarker.remove();
+        LatLng myPosition = latLng;
+        myPositionMarker = mMap.addMarker(new MarkerOptions().position(myPosition).title("Default Position").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+
+        LocationManager lm = (LocationManager)getContext().getSystemService(getContext().LOCATION_SERVICE);
+        boolean gps_enabled = false;
+        //check if location is enabled on the phone
+        try {
+            gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        } catch(Exception ex) {}
+
         if (ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            //add  the blue dot on my localisation
-            mMap.setMyLocationEnabled(true);
+           if(gps_enabled) {
+               Log.d("gps", "enabled: ");
+               myPositionMarker.remove();
+           }
+               //add  the blue dot on my localisation
+               mMap.setMyLocationEnabled(true);
+
         }
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myPosition,14));
 
     }
 
-    public void addMarkers(Places places){
+    public void addMarkers(Places places, LatLng mLatLng) {
         mMap.clear();
-        for(Results result: places.results){
+        LatLng myPosition = mLatLng;
+        mMap.addMarker(new MarkerOptions().position(myPosition).title("Default Position").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+        for (Results result : places.results) {
             LatLng placeLatLng = result.geometry.location.getLatLng();
             mMap.addMarker(new MarkerOptions().position(placeLatLng).title(result.name));
 
         }
+    }
 
+    public void addMarkers(Places places){
+            mMap.clear();
+            for(Results result: places.results){
+                LatLng placeLatLng = result.geometry.location.getLatLng();
+                mMap.addMarker(new MarkerOptions().position(placeLatLng).title(result.name));
+
+            }
     }
 }
