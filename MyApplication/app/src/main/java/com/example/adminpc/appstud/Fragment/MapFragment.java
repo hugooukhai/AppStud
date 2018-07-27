@@ -92,6 +92,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public boolean onMyLocationButtonClick() {
                 ((MainActivity)getActivity()).getLocation();
+                placeAutoComplete.setText(null);
                 return true;
             }
         });
