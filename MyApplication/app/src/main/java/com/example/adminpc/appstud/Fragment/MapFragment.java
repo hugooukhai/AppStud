@@ -12,7 +12,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.example.adminpc.appstud.MainActivity;
 import com.example.adminpc.appstud.Model.Places;
 import com.example.adminpc.appstud.Model.Results;
 import com.example.adminpc.appstud.R;
@@ -37,6 +39,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private PlaceAutocompleteFragment placeAutoComplete;
+    private LatLng placeLatLng;
 
     @Nullable
     @Override
@@ -54,11 +57,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             public void onPlaceSelected(Place place) {
 
                 Log.d("Maps", "Place selected: " + place.getName());
+                placeLatLng = place.getLatLng();
+                updateMap(placeLatLng);
+                ((MainActivity) getActivity()).searchForBars(placeLatLng);
             }
 
             @Override
             public void onError(Status status) {
                 Log.d("Maps", "An error occurred: " + status);
+
+                Toast.makeText(getContext(),"Error, no place found",Toast.LENGTH_SHORT);
             }
         });
 // Obtain the SupportMapFragment and get notified when the map is ready to be used.
