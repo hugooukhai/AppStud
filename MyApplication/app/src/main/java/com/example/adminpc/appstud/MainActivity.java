@@ -156,6 +156,11 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.Co
                     // permission not granted
                     Toast.makeText(this,"Location permission not granted",Toast.LENGTH_SHORT);
                     gpsLocation=false;
+                    // Default location on Toulouse if permission not granted
+                    gpsLocation = false;
+                    noGpsLocation = new LatLng(43.6, 1.433333);
+                    mMapFragment.updateMap(noGpsLocation);
+                    lookForBars();
                 }
                 return;
             }
@@ -181,6 +186,7 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.Co
 
             } else {
 
+                // Default location on Toulouse while waiting for gps
                 gpsLocation = false;
                 noGpsLocation = new LatLng(43.6, 1.433333);
                 mMapFragment.updateMap(noGpsLocation);

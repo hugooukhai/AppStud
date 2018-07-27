@@ -36,9 +36,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    private Marker sydneyMarker;
-    private Marker myPositionMarker;
-    PlaceAutocompleteFragment placeAutoComplete;
+    private PlaceAutocompleteFragment placeAutoComplete;
 
     @Nullable
     @Override
@@ -83,29 +81,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        sydneyMarker = mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
 
     public void updateMap(LatLng latLng) {
-        sydneyMarker.remove();
-        LatLng myPosition = latLng;
-        myPositionMarker = mMap.addMarker(new MarkerOptions().position(myPosition).title("Default Position").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
 
-        LocationManager lm = (LocationManager)getContext().getSystemService(getContext().LOCATION_SERVICE);
-        boolean gps_enabled = false;
-        //check if location is enabled on the phone
-        try {
-            gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        } catch(Exception ex) {}
+        LatLng myPosition = latLng;
+
 
         if (ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-           if(gps_enabled) {
-               Log.d("gps", "enabled: ");
-               myPositionMarker.remove();
-           }
                //add  the blue dot on my localisation
                mMap.setMyLocationEnabled(true);
 
