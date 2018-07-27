@@ -51,6 +51,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // Search bar provided by Google to search for places
         placeAutoComplete = (PlaceAutocompleteFragment) getActivity().getFragmentManager().findFragmentById(R.id.place_autocomplete);
         placeAutoComplete.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
@@ -112,6 +113,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     }
 
+    // Add markers for given LatLng
     public void addMarkers(Places places, LatLng mLatLng) {
         mMap.clear();
         LatLng myPosition = mLatLng;
@@ -123,6 +125,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
+    // Add markers for gps location
     public void addMarkers(Places places){
             mMap.clear();
             for(Results result: places.results){

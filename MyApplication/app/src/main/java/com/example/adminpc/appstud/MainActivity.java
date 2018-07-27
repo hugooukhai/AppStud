@@ -148,9 +148,6 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.Co
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     //permission granted, get location
                     getLocation();
-                    //gpsLocation=true;
-
-
                 } else {
                     // permission not granted
                     Toast.makeText(this,"Location permission not granted",Toast.LENGTH_SHORT);
@@ -191,7 +188,7 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.Co
                 searchForBars(noGpsLocation);
 
 
-                //we don't have location, ask for update LocationRequest locationRequest = new LocationRequest();
+                //we don't have location, ask for update
                 LocationRequest locationRequest = new LocationRequest();
                 locationRequest.setNumUpdates(1);
                 locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
@@ -211,13 +208,13 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.Co
         }
     }
 
+    // Change location to gps location
     public void lookForBars(){
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     //Use OKHtttp and GSON libraries to easily get and parse Json
                     OkHttpClient client = new OkHttpClient();
-                    //Request request = new Request.Builder().url("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="+mLastLocation.getLatitude()+","+mLastLocation.getLongitude()+"&radius=2000&type=bar&key=AIzaSyBNJyNzvROoFZfTmo529RLpGO110sxUoGo").build();
                     Request request = new Request.Builder().url("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + myPosition.latitude + "," + myPosition.longitude + "&radius=2000&type=bar&key=AIzaSyBNJyNzvROoFZfTmo529RLpGO110sxUoGo").build();
                     Gson gson = new Gson();
 
@@ -240,7 +237,7 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.Co
             }).start();
         }
 
-
+  // Change location to given LatLng and display markers
     public void searchForBars(final LatLng latLng){
         myPosition= latLng;
         new Thread(new Runnable() {
@@ -248,7 +245,6 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.Co
             public void run() {
                 //Use OKHtttp and GSON libraries to easily get and parse Json
                 OkHttpClient client = new OkHttpClient();
-                //Request request = new Request.Builder().url("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="+mLastLocation.getLatitude()+","+mLastLocation.getLongitude()+"&radius=2000&type=bar&key=AIzaSyBNJyNzvROoFZfTmo529RLpGO110sxUoGo").build();
                 Request request = new Request.Builder().url("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latLng.latitude + "," + latLng.longitude + "&radius=2000&type=bar&key=AIzaSyBNJyNzvROoFZfTmo529RLpGO110sxUoGo").build();
                 Gson gson = new Gson();
 
