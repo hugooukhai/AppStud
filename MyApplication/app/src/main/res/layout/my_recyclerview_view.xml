@@ -1,22 +1,23 @@
-<LinearLayout android:layout_width="match_parent"
+<RelativeLayout android:layout_width="match_parent"
     android:layout_height="200dp"
     android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-            <ImageView
-                android:id="@+id/barImageView"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:layout_gravity="center"
-                android:scaleType="centerCrop"
-                >
-            </ImageView>
-            <TextView
-                android:id="@+id/barTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
+    <ImageView
+        android:id="@+id/barImageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_gravity="center"
+        android:scaleType="centerCrop"></ImageView>
 
-                />
-        </LinearLayout>
+    <TextView
+        android:id="@+id/barTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="#8000"
+        android:textColor="#d3d3d3"
+        android:paddingLeft="5dp"
+        android:textSize="20dp" />
+        </RelativeLayout>
